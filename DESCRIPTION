@@ -1,0 +1,11 @@
+Package: XMLmodularD
+Title: Creates support for SLURPS with XML
+Version: 0.0.0.9000
+Authors@R: person("Daniel", "ONeil", email = "Danny.oneil14@gmail.com", role = c("aut", "cre"))
+Description: This package can read and write data from vectors and data frames to XML in a format called the SIP Math standard. You can see more about the SIP Standard from ProbabilityManagement.org. 
+Depends: R (>= 3.4.1)
+License: TBD
+Encoding: UTF-8
+LazyData: true
+Maintainer: 'Daniel ONeil' <danny.oneil14@gmail.com>
+Imports: xml2
