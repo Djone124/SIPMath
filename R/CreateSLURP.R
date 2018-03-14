@@ -1,3 +1,5 @@
+
+
 index <- 1:1000
 normdist1 <- rnorm(1000,mean= 0, sd= 1)
 normdist2 <- rnorm(1000,mean= 0, sd= 1)
@@ -7,23 +9,29 @@ normdist5 <- rnorm(1000,mean= 0, sd= 1)
 test2.df <- data.frame(index,normdist1,normdist2,normdist3,normdist4,normdist5)
 
 
-CreateSLURP <- function(dataframe,filename,provenance,cvsr=2.0,average=FALSE,median=FALSE) {
+
+
+CreateSLURP <- function(dataframe,filename,index=TRUE,provenance="",cvsr=2.0,average=FALSE,median=FALSE,meta=NULL) {
   SIPS <- NULL
   res=""
-  for (index in 1:ncol(dataframe)) {
+  if (index==TRUE) start<- 2 else start<- 1
+  for (i in start:ncol(dataframe)) {
     SIPS <- c(SIPS,
-              paste( "<SIP name=",'"',colnames(dataframe[index]),'"',
-                     " count=",'"',length(dataframe[,index]),'"',
+              paste( "<SIP name=",'"',colnames(dataframe[i]),'"',
+                     " count=",'"',length(dataframe[,i]),'"',
                      " type=",'"',"CSV",'"',
-                     " provenance=",'"',provenance,'"',
-                     if (average==TRUE) paste(" average=",'"',mean(dataframe[,index]),'"') 
+                     if (provenance!="") paste(" provenance=",'"',provenance,'"')
                      else "",
-                     if (median==TRUE) paste(" median=",'"',median(dataframe[,index]),'"')
+                     for (paste(" ",meta[,1],'="',meta[,i],'"'),
+                     
+                     if (average==TRUE) paste(" average=",'"',mean(dataframe[,i]),'"') 
+                     else "",
+                     if (median==TRUE) paste(" median=",'"',median(dataframe[,i]),'"')
                      else "",
                      "> ",
                      paste( 
                        round(
-                         dataframe[,index],
+                         dataframe[,i],
                          digits = cvsr) ,
                        collapse = ",", sep = ", "),   # This is the line which takes the data from that column
                      " </SIP>",
@@ -37,7 +45,8 @@ CreateSLURP <- function(dataframe,filename,provenance,cvsr=2.0,average=FALSE,med
   write(
     paste( "<SLURP name=",'"',deparse(substitute(dataframe)),'"', 
            " provenance=",'"',provenance,'"',
-           " count=",'"',nrow(dataframe),'"',
+           if (index==TRUE) paste(" count=",'"',ncol(dataframe)-1,'"')
+           else paste(" count=",'"',ncol(dataframe),'"'),
            "> ",
            "\n",                                                      # 
            res,
@@ -47,5 +56,5 @@ CreateSLURP <- function(dataframe,filename,provenance,cvsr=2.0,average=FALSE,med
            collapse = ""),
     deparse(substitute(filename)),sep = "\n") }
 
-CreateSLURP(test2.df,testdfxml17.xml,provenance = "Testing with 1000 values",cvsr = 4,average = TRUE,median = TRUE)
+CreateSLURP(test2.df,testdfxml17.xml,meta=meta.df,provenance = "Testing with 1000 values",cvsr = 4,average = FALSE,median = FALSE)
 
