@@ -26,7 +26,7 @@ CreateSLURP <- function(dataframe,filename,index=TRUE,provenance="",csvr="",aver
   metadata.function <- function(i) {                 #for loop iterrating over the number of columns:1 to n without an index, 2 to n with index
     for (j in 1:nrow(meta[i])) {
       metas <- c(metas,
-                 paste(" ",meta[j,1],'="',meta[j,i],'"'))                          #Paste metadata (in development)
+                 paste(" ",meta[j,1],'="',meta[j,i],'"',collapse = "",sep = ""))                          #Paste metadata (in development)
       }
     for (metadata in metas) {
     res.meta <- paste(res.meta,metadata,sep = "")
@@ -35,26 +35,26 @@ CreateSLURP <- function(dataframe,filename,index=TRUE,provenance="",csvr="",aver
 
   for (i in start:ncol(dataframe)) {                 #for loop iterrating over the number of columns:1 to n without an index, 2 to n with index
     SIPS <- c(SIPS,
-              paste( "<SIP name=",'"',colnames(dataframe[i]),'"',                         #Paste the column name with SIP name
-                     " count=",'"',length(dataframe[,i]),'"',                             #Paste in the count of items in the column
-                     " type=",'"',"CSV",'"',                                              #Paste type with hardcoded default CSV
-                     if (provenance!="") paste(" provenance=",'"',provenance,'"')         #If Provenance is blank then skip, otherwise paste Provenance
+              paste( "<SIP name=",'"',colnames(dataframe[i]),'"',                                  #Paste the column name with SIP name
+                     " count=",'"',length(dataframe[,i]),'"',                                      #Paste in the count of items in the column
+                     " type=",'"',"CSV",'"',                                                       #Paste type with hardcoded default CSV
+                     if (provenance!="") paste(" provenance=",'"',provenance,'"',sep = "")         #If Provenance is blank then skip, otherwise paste Provenance
                      else "",
-                     metadata.function(i),
-                     if (average==TRUE) paste(" average=",'"',mean(dataframe[,i]),'"')    #If average is true, take mean of column otherwise skip
+                     metadata.function(i),                                                         #If there is metadata added, then use it by calling the metadata.function function
+                     if (average==TRUE) paste(" average=",'"',mean(dataframe[,i]),'"')             #If average is true, take mean of column otherwise skip
                      else "",
-                     if (median==TRUE) paste(" median=",'"',median(dataframe[,i]),'"')    #If median is true, take median of column otherwise skip
+                     if (median==TRUE) paste(" median=",'"',median(dataframe[,i]),'"')             #If median is true, take median of column otherwise skip
                      else "",
                      "> ",
                      paste( 
                        if (is.numeric(csvr)==TRUE) 
                          round(
-                           dataframe[,i],                                                   #Paste the data from the current column
-                           digits = as.numeric(csvr))                                                  #Round by the CSVR argument
-                       ,collapse = ",", sep = ", "),                                       #Separate the data with a comma
-                     " </SIP>",                                                           # End each string with the ending XML
-                     "\n",                                                                #At the end of the function, the write function will add each SIP to a new line with this
-                     sep = "",                                                            #
+                           dataframe[,i],                                                          #Paste the data from the current column
+                           digits = as.numeric(csvr))                                              #Round by the CSVR argument
+                       ,collapse = ",", sep = ", "),                                               #Separate the data with a comma
+                     " </SIP>",                                                                    #End each string with the ending XML
+                     "\n",                                                                         #At the end of the function, the write function will add each SIP to a new line with this
+                     sep = "",                                                                     #
                      collapse = "") )
   }
   for (items in SIPS) {
@@ -76,4 +76,4 @@ CreateSLURP <- function(dataframe,filename,index=TRUE,provenance="",csvr="",aver
 
 setwd("/Users/danny/GitHub/SIPMath")
 CreateSLURP(test2.df,testdfxml17.xml,provenance = "Testing with 1000 values",csvr = 4,average = FALSE,median = FALSE,meta = meta.df)
-}
+
