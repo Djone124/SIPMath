@@ -75,5 +75,5 @@ CreateSLURP <- function(dataframe,filename,index=TRUE,provenance="",csvr="",aver
     deparse(substitute(filename)),sep = "\n") }
 
 setwd("/Users/danny/GitHub/SIPMath")
-CreateSLURP(test2.df,testdfxml17.xml,provenance = "Testing with 1000 values",csvr = 4,average = FALSE,median = FALSE,meta = meta.df)
+CreateSLURP(test2.df,testdfxml21.xml,provenance = "Testing with 1000 values",csvr = 4,average = FALSE,median = FALSE,meta = meta.df)
 
